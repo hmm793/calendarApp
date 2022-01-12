@@ -1,5 +1,4 @@
 import { Component } from '@angular/core';
-
 @Component({
   selector: 'salt-root',
   templateUrl: './app.component.html',
