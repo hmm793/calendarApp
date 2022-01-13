@@ -410,7 +410,11 @@
               "apps/teacher/src/favicon.ico",
               "apps/teacher/src/assets"
             ],
-            "styles": ["apps/teacher/src/styles.css"],
+            "styles": [
+              "./node_modules/@angular/material/prebuilt-themes/indigo-pink.css",
+              "apps/student/src/styles.css",
+              "apps/teacher/src/styles.css"
+            ],
             "scripts": []
           },
           "configurations": {

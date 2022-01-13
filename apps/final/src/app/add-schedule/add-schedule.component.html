@@ -70,6 +70,7 @@
                 value="{{ sub.subject_name }}"
                 *ngFor="let sub of subject"
                 (click)="_durationOto(subjectValue)"
+                (click)="_relatedClass(subjectValue)"
                 >{{ sub.subject_name }}</mat-option
               >
             </mat-select>
@@ -78,11 +79,17 @@
           <!-- Kelas -->
           <mat-form-field>
             <mat-label>Class</mat-label>
-            <mat-select formControlName="kelas" [(value)]="kelasValue">
+            <input matInput disabled value="{{ kelasValue }}" />
+            <!-- <mat-select formControlName="kelas" [(value)]="kelasValue">
               <mat-option value="{{ kel._id }}" *ngFor="let kel of kelas">{{
                 kel.class_name
               }}</mat-option>
-            </mat-select>
+            </mat-select> -->
+            <!-- <mat-select formControlName="kelas" [(value)]="kelasValue">
+              <mat-option value="{{ kel._id }}" *ngFor="let kel of kelas">{{
+                kel.class_name
+              }}</mat-option>
+            </mat-select> -->
           </mat-form-field>
 
           <!-- daysOfWeek -->

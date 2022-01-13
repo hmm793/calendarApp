@@ -36,6 +36,10 @@ const routes: Routes = [
     path: 'scorring/:subjectID',
     component: ScoringComponent,
   },
+  {
+    path: 'scorring2',
+    component: Scoriingv2Component,
+  },
 ];
 
 // Toast
@@ -47,6 +51,7 @@ import { AddScheduleComponent } from './add-schedule/add-schedule.component';
 import { InfoComponent } from './info/info.component';
 import { TestSidenavComponent } from './test-sidenav/test-sidenav.component';
 import { ScoringComponent } from './scoring/scoring.component';
+import { Scoriingv2Component } from './scoriingv2/scoriingv2.component';
 
 // // Charts
 // import { NgChartsModule } from 'ng2-charts';
@@ -66,6 +71,7 @@ FullCalendarModule.registerPlugins([
     InfoComponent,
     TestSidenavComponent,
     ScoringComponent,
+    Scoriingv2Component,
   ],
   imports: [
     BrowserModule,

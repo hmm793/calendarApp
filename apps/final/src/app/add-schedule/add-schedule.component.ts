@@ -31,6 +31,7 @@ export class AddScheduleComponent implements OnInit {
   kelas: Kelas[] = [];
   subject: any[] = [];
   kelasValue?: string;
+  kelasIdValue?: string;
   subjectValue?: string;
   endValue = 'test';
   dayValue = [
@@ -96,7 +97,6 @@ export class AddScheduleComponent implements OnInit {
   }
 
   _calcEndTime(startTime: string, duration: number) {
-    console.log('TIPE : ', typeof startTime);
     const tt = startTime.split(':');
     const sec = parseInt(tt[0]) * 3600 + parseInt(tt[1]) * 60;
     const durationInSecond = duration * 60;
@@ -105,10 +105,19 @@ export class AddScheduleComponent implements OnInit {
       .substr(11, 8);
   }
 
+  _relatedClass(subjectName: any) {
+    this.kelas.forEach((el) => {
+      el.subject.forEach((subj) => {
+        if (subj.subject_name == subjectName) {
+          this.kelasValue = el.class_name;
+          this.kelasIdValue = el._id;
+        }
+      });
+    });
+  }
   private _kelasInit() {
     this.kelasService.getAllClass().subscribe(
       (kelas) => {
-        console.log('KELAS : ', kelas);
         kelas.forEach((element: any) => {
           this.kelas.push(element);
         });
@@ -141,7 +150,6 @@ export class AddScheduleComponent implements OnInit {
         color: this.form?.value.color,
         allDay: this.form?.value.allDay,
       };
-      console.log('DATA EVENT', newData_2);
       this.scheduleService.createSchedule(newData_2).subscribe((res: any) => {
         if (res.error) {
           // this.toastr.success(res.error);
@@ -191,7 +199,7 @@ export class AddScheduleComponent implements OnInit {
   save2() {
     const newData = {
       title: this.form?.value.title,
-      kelas: this.form?.value.kelas,
+      kelas: this.kelasIdValue,
       daysOfWeek: [this.dayValueNumber],
       startTime: this.form?.value.startTime,
       endTime: this.endTimeValue,

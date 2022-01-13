@@ -7,25 +7,17 @@ import { Subject } from '../models/subject';
 import { KelasService } from '../services/kelas.service';
 import { StudentService } from '../services/student.service';
 import { SubjectService } from '../services/subject.service';
+import { TeacherService } from '../services/teacher.service';
+import {
+  MatSnackBar,
+  MatSnackBarHorizontalPosition,
+  MatSnackBarVerticalPosition,
+} from '@angular/material/snack-bar';
+
 export interface PeriodicElement {
   id: string;
   name: string;
   nilai: string;
-}
-export interface SubjectInterface {
-  _id: string;
-  subject_name: string;
-  teacher_id: {
-    _id: string;
-    first_name: string;
-    last_name: string;
-    email: string;
-    phone: string;
-    short_bio: string;
-    id: string;
-  };
-  duration: string;
-  id: string;
 }
 
 @Component({
@@ -34,92 +26,31 @@ export interface SubjectInterface {
   styleUrls: ['./scoring.component.css'],
 })
 export class ScoringComponent implements OnInit {
-  displayedColumns: string[] = ['id', 'name', 'nilai'];
-  dataSource: PeriodicElement[];
-  dataSubject: Subject = {
-    _id: '',
-    subject_name: '',
-    teacher_id: {
-      _id: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-      phone: '',
-      short_bio: '',
-      id: '',
-    },
-    duration: '',
-    id: '',
-  };
-
-  infoKelas: Kelas = {
-    _id: '',
-    class_name: '',
-    teacher: {
-      _id: '',
-      first_name: '',
-      last_name: '',
-      email: '',
-      phone: '',
-      short_bio: '',
-      id: '',
-    },
-    subject: [
-      {
-        _id: '',
-        subject_name: '',
-        teacher_id: {
-          _id: '',
-          first_name: '',
-          last_name: '',
-          email: '',
-          phone: '',
-          short_bio: '',
-          id: '',
-        },
-        duration: '',
-        id: '',
-      },
-    ],
-  };
-
+  horizontalPosition: MatSnackBarHorizontalPosition = 'right';
+  verticalPosition: MatSnackBarVerticalPosition = 'top';
+  editField: string;
+  idSubject: any;
+  studentData: PeriodicElement[];
+  studentData1: PeriodicElement[] = [];
+  studentData2;
+  dataSubject: Subject;
+  infoKelas: Kelas;
+  tempData: PeriodicElement;
   constructor(
     private studentService: StudentService,
     private subjectService: SubjectService,
     private kelasService: KelasService,
-    private route: ActivatedRoute
+    private teacherService: TeacherService,
+    private route: ActivatedRoute,
+    private _snackBar: MatSnackBar
   ) {}
   ngOnInit(): void {
-    this.route.params.subscribe(
-      (params) => {
-        params['subjectID'];
-        this._studentInit([params['subjectID']]);
-        this._subjectInit([params['subjectID']]);
-        this._kelasInit([params['subjectID']]);
-      },
-      () => {},
-      () => {}
-    );
-
-    // this.dataSource = [
-    //   { id: '1', name: 'Hydrogen', nilai: 'H' },
-    //   { id: '2', name: 'Helium', nilai: 'He' },
-    //   { id: '3', name: 'Lithium', nilai: 'Li' },
-    //   { id: '4', name: 'Beryllium', nilai: 'Be' },
-    //   { id: '5', name: 'Boron', nilai: 'B' },
-    //   { id: '6', name: 'Carbon', nilai: 'C' },
-    //   { id: '7', name: 'Nitrogen', nilai: 'N' },
-    //   { id: '8', name: 'Oxygen', nilai: 'O' },
-    //   { id: '9', name: 'Fluorine', nilai: 'F' },
-    //   { id: '1', name: 'Neon', nilai: 'Ne' },
-    // ];
-  }
-
-  private _studentInit(id: any) {
-    this.studentService.getAllStudentBySubject(id).subscribe((res) => {
-      res.forEach((hes, i) => {
-        console.log('student-', i, hes);
-      });
+    this.route.params.subscribe((params) => {
+      params['subjectID'];
+      this._kelasInit([params['subjectID']]);
+      this._subjectInit([params['subjectID']]);
+      this._studentInit([params['subjectID']]);
+      this.idSubject = params['subjectID'];
     });
   }
 
@@ -132,5 +63,41 @@ export class ScoringComponent implements OnInit {
     this.kelasService.getClassBySubject(idSubject).subscribe((res) => {
       this.infoKelas = res[0];
     });
+  }
+  private _studentInit(id: any) {
+    this.studentService.getAllStudentBySubject(id).subscribe((res) => {
+      res.forEach((hes) => {
+        const tempScore = hes.subject.find((el) => {
+          if (el.subject_name == this.idSubject) {
+            return el;
+          }
+        });
+        this.tempData = {
+          id: hes.id,
+          name: `${hes.first_name} ${hes.last_name}`,
+          nilai: tempScore.score_subject,
+        };
+        this.studentData1.push(this.tempData);
+      });
+      this.studentData = this.studentData1;
+    });
+    this.studentData2 = this.studentData1;
+  }
+
+  changeValue(id: number, property: string, event: any) {
+    this.studentData2[id][property] = event;
+  }
+
+  submit() {
+    this.teacherService
+      .setStudentScore(this.idSubject, this.studentData2)
+      .subscribe((res) => {
+        this._snackBar.open('Jadwal Berhasil Dibuat', 'Close', {
+          horizontalPosition: this.horizontalPosition,
+          verticalPosition: this.verticalPosition,
+        });
+      });
+
+    window.location.reload();
   }
 }

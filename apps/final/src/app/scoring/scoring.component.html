@@ -1,40 +1,35 @@
-<mat-card class="example-card">
-  <mat-card-title>{{ dataSubject.subject_name }}</mat-card-title>
-  <mat-card-subtitle>{{ dataSubject.duration }} min</mat-card-subtitle>
-  <mat-card-subtitle>Kelas {{ infoKelas.class_name }}</mat-card-subtitle>
-  <mat-card-content>
-    <p>
-      Guru :
-      {{ dataSubject.teacher_id.first_name }}
-      {{ dataSubject.teacher_id.last_name }}
-    </p>
-  </mat-card-content>
-</mat-card>
+<div id="table">
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Kelas</th>
+      <th>Nilai</th>
+      <th>Aksi</th>
+    </tr>
+    <tr *ngFor="let student of studentData; let i = index">
+      <td>
+        {{ student.id }}
+      </td>
+      <td>
+        {{ student.name }}
+      </td>
+      <td>
+        {{ infoKelas.class_name }}
+      </td>
+      <td>
+        <input type="text" #nilaiValue placeholder="{{ student.nilai }}" />
+      </td>
+      <td>
+        <button
+          mat-raised-button
+          (click)="changeValue(i, 'nilai', nilaiValue.value)"
+        >
+          Update
+        </button>
+      </td>
+    </tr>
+  </table>
+</div>
 
-<table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
-  <!--- Note that these columns can be defined in any order.
-          The actual rendered columns are set as a property on the row definition" -->
-
-  <!-- ID Column -->
-  <ng-container matColumnDef="id">
-    <th mat-header-cell *matHeaderCellDef>ID Student.</th>
-    <td mat-cell *matCellDef="let element">{{ element.id }}</td>
-  </ng-container>
-
-  <!-- Name Column -->
-  <ng-container matColumnDef="name">
-    <th mat-header-cell *matHeaderCellDef>Name</th>
-    <td mat-cell *matCellDef="let element">{{ element.name }}</td>
-  </ng-container>
-
-  <!-- Symbol Column -->
-  <ng-container matColumnDef="nilai">
-    <th mat-header-cell *matHeaderCellDef>Nilai</th>
-    <td mat-cell *matCellDef="let element">
-      {{ element.nilai }}
-    </td>
-  </ng-container>
-
-  <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
-  <tr mat-row *matRowDef="let row; columns: displayedColumns"></tr>
-</table>
+<button mat-raised-button (click)="submit()">Submit</button>

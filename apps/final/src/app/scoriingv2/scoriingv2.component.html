@@ -1,0 +1,29 @@
+<div id="table">
+  <table>
+    <tr>
+      <th>ID</th>
+      <th>Name</th>
+      <th>Kelas</th>
+      <th>Nilai</th>
+    </tr>
+    <tr *ngFor="let student of studentData; let id = index">
+      <td>
+        {{ student.id }}
+      </td>
+      <td>
+        {{ student.name }}
+      </td>
+      <td>
+        {{ student.class_name }}
+      </td>
+      <td>
+        <span
+          contenteditable="true"
+          (keyup)="changeValue(id, 'companyName', $event)"
+          (blur)="updateList(id, 'companyName', $event)"
+          >{{ student.companyName }}</span
+        >
+      </td>
+    </tr>
+  </table>
+</div>

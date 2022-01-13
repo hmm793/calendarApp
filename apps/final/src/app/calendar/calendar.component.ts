@@ -141,7 +141,6 @@ export class CalendarComponent implements OnInit {
 
     this.scheduleService.getTempSchedule(this.filteredSchedule).subscribe(
       (filteredSchedule) => {
-        console.log('DATA3: ', filteredSchedule);
         this.events = filteredSchedule;
         setTimeout(() => {
           //full calendar setting and event binding

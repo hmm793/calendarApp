@@ -2,8 +2,10 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Kelas } from '../models/kelas';
+
+import { environment } from '../../environments/environment';
 // const link1 = 'https://final-project-app-v1.herokuapp.com/api/class';
-const link2 = 'http://localhost:3000/api/class';
+const link2 = environment.port;
 
 @Injectable({
   providedIn: 'root',
@@ -11,10 +13,10 @@ const link2 = 'http://localhost:3000/api/class';
 export class KelasService {
   constructor(private http: HttpClient) {}
   getAllClass(): Observable<Kelas[]> {
-    return this.http.get<Kelas[]>(link2);
+    return this.http.get<Kelas[]>(link2 + '/api/class');
   }
   getClassBySubject(id: any): Observable<Kelas[]> {
-    return this.http.get<Kelas[]>(`${link2}/getClassBySubject/${id}`);
+    return this.http.get<Kelas[]>(`${link2}/api/class/getClassBySubject/${id}`);
   }
 
   // getTempClasses(kelas?: any): Observable<any[]> {
